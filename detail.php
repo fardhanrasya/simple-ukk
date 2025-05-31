@@ -11,6 +11,9 @@ if ($koneksi->connect_error) {
     die("Koneksi gagal: " . $koneksi->connect_error);
 }
 
+// Set judul halaman
+$page_title = "Detail Pesanan - Aplikasi Pemesanan Makanan";
+
 // Cek ID pesanan
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: index.php");
@@ -45,16 +48,8 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Pesanan - Aplikasi Pemesanan Makanan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
+<?php include 'header.php'; ?>
+    <div class="container">
         <div class="card mb-4">
             <div class="card-header bg-success text-white">
                 <h2 class="mb-0">Detail Pesanan #<?= $pesanan_id ?></h2>
@@ -107,7 +102,29 @@ if ($result->num_rows > 0) {
                     </table>
                 </div>
                 
-                <a href="index.php" class="btn btn-primary">Kembali ke Halaman Utama</a>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <a href="index.php" class="btn btn-primary">Kembali ke Halaman Utama</a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">QR Code Konfirmasi Pesanan</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <p>Scan QR code ini untuk mengubah status pesanan menjadi <strong>Selesai</strong></p>
+                                <?php
+                                include 'qrcode.php';
+                                $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+                                $qr_url = $base_url . "/update_status.php?id=" . $pesanan_id;
+                                $qrCodeUrl = generateQRCode($qr_url, 300);
+                                ?>
+                                <img src="<?= $qrCodeUrl ?>" alt="QR Code" class="img-fluid" style="max-width: 250px;">
+                                <p class="mt-2 text-muted small">QR code ini hanya dapat digunakan sekali</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -31,7 +31,7 @@
           <td><?= $row['jumlah'] ?></td>
           <td>
             <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
-            <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus?')">Hapus</a>
+            <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger">Hapus</a>
           </td>
         </tr>
       <?php endwhile; ?>
